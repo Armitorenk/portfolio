@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    @apply transition-colors duration-500;
+  }
+  html.dark body {
+    @apply bg-paper-dark text-ink-dark;
+  }
+
+  ::selection {
+    @apply bg-accent text-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .site-container {
+    @apply mx-auto w-full max-w-site px-5 md:px-8;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent;
+  }
+
+  .display {
+    @apply font-display font-medium leading-[1.02] tracking-[-0.02em];
+  }
+
+  /* Card surface used across sections */
+  .card {
+    @apply rounded-2xl border border-ink/10 bg-white/60 backdrop-blur-sm transition-all duration-300 dark:border-ink-dark/10 dark:bg-white/[0.025];
+  }
+  .card-hover {
+    @apply hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_18px_40px_-24px_rgba(15,164,183,0.5)];
+  }
+
+  /* Pill / tag chip — mirrors the CV's tag style */
+  .chip {
+    @apply rounded-full border border-accent/25 bg-accent-soft px-2.5 py-1 font-mono text-[11px] text-accent-deep dark:bg-accent/10 dark:text-accent-bright;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-accent-deep;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-full border border-ink/15 px-5 py-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent dark:border-ink-dark/15;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 164, 183, 0.35);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}

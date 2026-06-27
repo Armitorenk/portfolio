@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Armağan Aydoğan">
+  <defs>
+    <linearGradient id="a" x1="32" y1="8" x2="32" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22C4D6" />
+      <stop offset=".55" stop-color="#0FA4B7" />
+      <stop offset="1" stop-color="#0B6F7E" />
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#a)" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12.5 55 L32 9 L51.5 55" />
+    <path d="M20 39 H44" />
+  </g>
+</svg>
