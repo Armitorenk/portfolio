@@ -8,7 +8,7 @@ import {
   Send,
 } from "lucide-react";
 import { contact, profile, ui } from "../data/content";
-import { CV_DOWNLOAD_NAME, CV_PATH } from "../lib/config";
+import { CV_DOWNLOAD_NAME, CV_PATH, WEB3FORMS_ACCESS_KEY } from "../lib/config";
 import { useT } from "../lib/useT";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
@@ -26,28 +26,41 @@ export function Contact() {
     e.preventDefault();
     const form = e.currentTarget;
     const fd = new FormData(form);
+
+    // Without a key, gracefully fall back to the visitor's mail client.
+    if (!WEB3FORMS_ACCESS_KEY) {
+      const subject = `Portfolyo mesajı — ${fd.get("name") || ""}`;
+      const body = `${fd.get("message") || ""}\n\n— ${fd.get("name") || ""} (${
+        fd.get("email") || ""
+      })`;
+      window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(
+        subject
+      )}&body=${encodeURIComponent(body)}`;
+      return;
+    }
+
     setStatus("sending");
 
-    // FormSubmit delivers straight to the inbox — no mail client, no key.
+    // Web3Forms delivers straight to the inbox — no backend, no mail client.
     try {
-      const res = await fetch(
-        `https://formsubmit.co/ajax/${encodeURIComponent(profile.email)}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            name: fd.get("name"),
-            email: fd.get("email"),
-            message: fd.get("message"),
-            _subject: `Portfolyo mesajı — ${fd.get("name") || ""}`,
-            _template: "table",
-            _captcha: "false",
-          }),
-        }
-      );
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name: fd.get("name"),
+          email: fd.get("email"),
+          message: fd.get("message"),
+          subject: `Portfolyo mesajı — ${fd.get("name") || ""}`,
+          from_name: "Portfolyo",
+          replyto: fd.get("email"),
+          // Honeypot — real users never tick this hidden box.
+          botcheck: fd.get("botcheck"),
+        }),
+      });
       const data = await res.json();
       if (data.success === true || data.success === "true") {
         setStatus("sent");
@@ -85,6 +98,15 @@ export function Contact() {
             onSubmit={onSubmit}
             className="rounded-2xl border border-ink/10 bg-white p-6 text-ink shadow-sm dark:border-ink-dark/10 md:p-8"
           >
+            {/* Spam honeypot — hidden from real users */}
+            <input
+              type="checkbox"
+              name="botcheck"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+            />
             <div className="grid gap-4 sm:grid-cols-2">
               <Field name="name" type="text" label={t(contact.form.name)} required />
               <Field name="email" type="email" label={t(contact.form.email)} required />

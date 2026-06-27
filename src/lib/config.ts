@@ -7,7 +7,7 @@
 //    YOUR inbox and Web3Forms handles spam protection).
 // Until a key is set, the form gracefully falls back to opening the user's
 // mail client (mailto) instead.
-export const WEB3FORMS_ACCESS_KEY = "";
+export const WEB3FORMS_ACCESS_KEY = "4a4e4909-874e-477e-8dac-6e448f557302";
 
 // --- GitHub -----------------------------------------------------------------
 export const GITHUB_USER = "Armitorenk";
